@@ -6,29 +6,23 @@ public class MovementManager : MonoBehaviour {
     [SerializeField] private CustomFloatingJoystic _floatingJoystick;
     [Header("Movement Attributes")]
     [SerializeField] private float movementSpeed;
-    [SerializeField] private float dashingDistanceIncreaseSpeed;
-    [Header("Dashing")]
     [SerializeField] private VirusShadow virusShadow;
     private Vector3 currentMovementVector;
-    private float dashingDistance;
+    private DashingController dashingController;
 
-    private Rigidbody2D _rb;
+    private void Awake()
+    {
+        dashingController = GetComponent<DashingController>();
+    }
 
     private void OnEnable()
     {
-        _floatingJoystick.PointerDownEvent += OnPointerDown;
         _floatingJoystick.PointerUpEvent += OnPointerUp;
     }
 
     private void OnDisable()
     {
-        _floatingJoystick.PointerDownEvent -= OnPointerDown;
         _floatingJoystick.PointerUpEvent -= OnPointerUp;
-    }
-
-    private void Awake()
-    {
-        _rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
@@ -52,23 +46,12 @@ public class MovementManager : MonoBehaviour {
         // Look at
         float angle = Mathf.Atan2(movementVector.y, movementVector.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
-        // Increase dashing distance
-        dashingDistance += dashingDistanceIncreaseSpeed * Time.deltaTime;
-        Vector3 positionAfterDash = transform.position + currentMovementVector * dashingDistance;
-        virusShadow.SetPosition(positionAfterDash);
+        // Prepare for dashing
+        dashingController.PrepareForDash(currentMovementVector);
     }
 
     private void OnPointerUp()
     {
-        //Dash to shadow
-        transform.position = virusShadow.GetPosition();
-        //Reset dashing variables
-        virusShadow.Hide();
-        dashingDistance = 0;
-    }
-
-    private void OnPointerDown()
-    {
-        virusShadow.Show();
+        transform.position = transform.position = Vector3.Lerp(transform.position, virusShadow.GetPosition(), 1f);
     }
 }
