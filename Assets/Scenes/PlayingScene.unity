@@ -177,8 +177,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _floatingJoystick: {fileID: 8154733521671886558}
-  movementSpeed: 0.5
   virusShadow: {fileID: 1727023033}
+  movementSpeed: 0.5
+  rotationDuration: 0.1
 --- !u!50 &142695706
 Rigidbody2D:
   serializedVersion: 4
@@ -265,6 +266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _floatingJoystick: {fileID: 8154733521671886558}
   dashingIncreasingSpeed: 2.5
+  dashingDuration: 0
   virusShadow: {fileID: 1727023033}
   trailRenderer: {fileID: 1683319321}
   drawingCircle: {fileID: 1988136235}

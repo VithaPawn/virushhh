@@ -5,10 +5,11 @@ public class DashingController : MonoBehaviour {
     [Header("Joystick")]
     [SerializeField] private CustomFloatingJoystic _floatingJoystick;
     [Header("Dashing Attributes")]
-    [SerializeField] private float dashingIncreasingSpeed;
     [SerializeField] private VirusShadow virusShadow;
     [SerializeField] private TrailRenderer trailRenderer;
     [SerializeField] private DrawingCircle drawingCircle;
+    [SerializeField] private float shadowMovementSpeed;
+    [SerializeField] private float dashingDuration;
 
     private float dashingDistance;
 
@@ -36,7 +37,7 @@ public class DashingController : MonoBehaviour {
 
     public void PrepareForDash(Vector3 movementVector)
     {
-        dashingDistance += dashingIncreasingSpeed * Time.deltaTime;
+        dashingDistance += shadowMovementSpeed * Time.deltaTime;
         Vector3 positionAfterDash = transform.position + movementVector * dashingDistance;
         virusShadow.SetPosition(positionAfterDash);
     }

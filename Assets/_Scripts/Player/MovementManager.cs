@@ -1,12 +1,16 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class MovementManager : MonoBehaviour {
 
     [Header("Joystick")]
     [SerializeField] private CustomFloatingJoystic _floatingJoystick;
+    
     [Header("Movement Attributes")]
-    [SerializeField] private float movementSpeed;
     [SerializeField] private VirusShadow virusShadow;
+    [SerializeField] private float movementSpeed;
+    [SerializeField] private float rotationDuration;
+
     private Vector3 currentMovementVector;
     private DashingController dashingController;
 
@@ -25,7 +29,7 @@ public class MovementManager : MonoBehaviour {
         _floatingJoystick.PointerUpEvent -= OnPointerUp;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (_floatingJoystick.Direction != Vector2.zero)
         {
@@ -45,9 +49,9 @@ public class MovementManager : MonoBehaviour {
         transform.position += movementVector * Time.deltaTime * movementSpeed;
         // Look at
         float angle = Mathf.Atan2(movementVector.y, movementVector.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+        transform.DORotate(new Vector3(0, 0, angle), rotationDuration);
         // Prepare for dashing
-        dashingController.PrepareForDash(currentMovementVector);
+        dashingController.PrepareForDash(movementVector);
     }
 
     private void OnPointerUp()
