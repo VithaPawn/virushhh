@@ -1,61 +1,109 @@
 using DG.Tweening;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem.Processors;
 
 public class MovementManager : MonoBehaviour {
 
+    [Header("Visual")]
+    [SerializeField] private GameObject playerVisual;
+    [SerializeField] private LayerMask layerMask;
+
     [Header("Joystick")]
     [SerializeField] private CustomFloatingJoystic _floatingJoystick;
-    
+
     [Header("Movement Attributes")]
-    [SerializeField] private VirusShadow virusShadow;
     [SerializeField] private float movementSpeed;
-    [SerializeField] private float rotationDuration;
+    [SerializeField] private GameObject movingArea;
 
-    private Vector3 currentMovementVector;
-    private DashingController dashingController;
-
-    private void Awake()
-    {
-        dashingController = GetComponent<DashingController>();
-    }
+    [Header("Dashing Attributes")]
+    [SerializeField] private VirusShadow virusShadow;
+    [SerializeField] private TrailRenderer trailRenderer;
+    [SerializeField] private DrawingCircle drawingCircle;
+    [SerializeField] private float shadowMovementSpeed;
+    [SerializeField] private float dashingDuration;
 
     private void OnEnable()
     {
         _floatingJoystick.PointerUpEvent += OnPointerUp;
+        _floatingJoystick.PointerDownEvent += OnPointerDown;
     }
 
     private void OnDisable()
     {
         _floatingJoystick.PointerUpEvent -= OnPointerUp;
+        _floatingJoystick.PointerDownEvent -= OnPointerDown;
+    }
+    private void OnPointerUp()
+    {
+        transform.DOMove(virusShadow.GetPosition(), dashingDuration);
+        StartCoroutine(Dash());
     }
 
-    private void FixedUpdate()
+    private void OnPointerDown()
+    {
+        virusShadow.Show();
+    }
+
+    private void Update()
     {
         if (_floatingJoystick.Direction != Vector2.zero)
         {
-            MoveAndLook();
+            HandleMovement();
         }
     }
 
-    private void MoveAndLook()
+    private void HandleMovement()
     {
         Vector2 joystickDirectionVector = _floatingJoystick.Direction.normalized;
         Vector3 movementVector = new Vector3(joystickDirectionVector.x, joystickDirectionVector.y, 0);
-        if (currentMovementVector.x != movementVector.x || currentMovementVector.y != movementVector.y)
-        {
-            currentMovementVector = movementVector;
-        }
         // Move
-        transform.position += movementVector * Time.deltaTime * movementSpeed;
+        Vector3 pos = transform.position + movementVector * movementSpeed * Time.deltaTime;
+        transform.position = LimitPositionInsideArea(movingArea, playerVisual, pos);
         // Look at
         float angle = Mathf.Atan2(movementVector.y, movementVector.x) * Mathf.Rad2Deg;
-        transform.DORotate(new Vector3(0, 0, angle), rotationDuration);
+        transform.rotation = Quaternion.Euler(0, 0, angle);
         // Prepare for dashing
-        dashingController.PrepareForDash(movementVector);
+        RaycastHit2D hit = Physics2D.Raycast(virusShadow.transform.position, movementVector, GetObjectWidth(virusShadow.gameObject), layerMask);
+        Vector3 shadowPos = virusShadow.GetPosition();
+        if (hit) { shadowPos += movementVector * shadowMovementSpeed * Time.deltaTime; }
+        virusShadow.SetPosition(LimitPositionInsideArea(movingArea, virusShadow.gameObject, shadowPos));
     }
 
-    private void OnPointerUp()
+    private IEnumerator Dash()
     {
-        transform.position = transform.position = Vector3.Lerp(transform.position, virusShadow.GetPosition(), 1f);
+        //Play dash animation
+        virusShadow.Hide();
+        trailRenderer.emitting = true;
+        drawingCircle.HideCircle();
+
+        //Wait for dash animation
+        yield return new WaitForSeconds(dashingDuration);
+
+        //Reset dashing variables
+        trailRenderer.emitting = false;
+        drawingCircle.ShowCircle();
+    }
+
+    private Vector3 LimitPositionInsideArea(GameObject area, GameObject obj, Vector3 pos)
+    {
+        Vector3 limitedPos = pos;
+        Renderer areaRenderer = area.GetComponent<Renderer>();
+        Renderer objRenderer = obj.GetComponent<Renderer>();
+
+        Bounds areaBounds = areaRenderer ? areaRenderer.bounds : new Bounds(Vector3.zero, Vector3.zero);
+        float objWidth = objRenderer ? objRenderer.bounds.size.x : 0;
+        float objHeight = objRenderer ? objRenderer.bounds.size.y : 0;
+
+        limitedPos.x = Mathf.Clamp(limitedPos.x, areaBounds.min.x + objWidth / 2, areaBounds.max.x - objWidth / 2);
+        limitedPos.y = Mathf.Clamp(limitedPos.y, areaBounds.min.y + objHeight / 2, areaBounds.max.y - objHeight / 2);
+
+        return limitedPos;
+    }
+
+    private float GetObjectWidth(GameObject obj)
+    {
+        Renderer objRenderer = obj.GetComponent<Renderer>();
+        return objRenderer ? objRenderer.bounds.size.x : 0;
     }
 }
