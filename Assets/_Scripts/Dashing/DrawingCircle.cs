@@ -34,4 +34,6 @@ public class DrawingCircle : MonoBehaviour {
     public void HideCircle() { foreach (var dot in dots) dot.Hide(); }
 
     public void ShowCircle() { foreach (var dot in dots) dot.Show(); }
+
+    public float GetRadius() {  return radius; } 
 }

@@ -20,9 +20,4 @@ public class VirusShadow : MonoBehaviour {
     {
         return transform.position;
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log("collision: " + collision.gameObject.name);  
-    }
 }

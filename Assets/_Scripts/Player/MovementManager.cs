@@ -7,7 +7,6 @@ public class MovementManager : MonoBehaviour {
 
     [Header("Visual")]
     [SerializeField] private GameObject playerVisual;
-    [SerializeField] private LayerMask layerMask;
 
     [Header("Joystick")]
     [SerializeField] private CustomFloatingJoystic _floatingJoystick;
@@ -64,10 +63,17 @@ public class MovementManager : MonoBehaviour {
         float angle = Mathf.Atan2(movementVector.y, movementVector.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
         // Prepare for dashing
-        RaycastHit2D hit = Physics2D.Raycast(virusShadow.transform.position, movementVector, GetObjectWidth(virusShadow.gameObject), layerMask);
         Vector3 shadowPos = virusShadow.GetPosition();
-        if (hit) { shadowPos += movementVector * shadowMovementSpeed * Time.deltaTime; }
-        virusShadow.SetPosition(LimitPositionInsideArea(movingArea, virusShadow.gameObject, shadowPos));
+        Vector3 tempShadowPos = shadowPos + movementVector * shadowMovementSpeed * Time.deltaTime;
+        float distance = Vector3.Distance(tempShadowPos, transform.position) + GetObjectWidth(virusShadow.gameObject)/2;
+        if (distance <= drawingCircle.GetRadius())
+        {
+            virusShadow.SetPosition(LimitPositionInsideArea(movingArea, virusShadow.gameObject, tempShadowPos));
+        }
+        else
+        {
+            virusShadow.SetPosition(LimitPositionInsideArea(movingArea, virusShadow.gameObject, shadowPos));
+        }
     }
 
     private IEnumerator Dash()
@@ -76,10 +82,8 @@ public class MovementManager : MonoBehaviour {
         virusShadow.Hide();
         trailRenderer.emitting = true;
         drawingCircle.HideCircle();
-
         //Wait for dash animation
         yield return new WaitForSeconds(dashingDuration);
-
         //Reset dashing variables
         trailRenderer.emitting = false;
         drawingCircle.ShowCircle();
@@ -95,8 +99,8 @@ public class MovementManager : MonoBehaviour {
         float objWidth = objRenderer ? objRenderer.bounds.size.x : 0;
         float objHeight = objRenderer ? objRenderer.bounds.size.y : 0;
 
-        limitedPos.x = Mathf.Clamp(limitedPos.x, areaBounds.min.x + objWidth / 2, areaBounds.max.x - objWidth / 2);
-        limitedPos.y = Mathf.Clamp(limitedPos.y, areaBounds.min.y + objHeight / 2, areaBounds.max.y - objHeight / 2);
+        limitedPos.x = Mathf.Clamp(limitedPos.x, areaBounds.min.x + objWidth, areaBounds.max.x - objWidth);
+        limitedPos.y = Mathf.Clamp(limitedPos.y, areaBounds.min.y + objHeight, areaBounds.max.y - objHeight);
 
         return limitedPos;
     }
