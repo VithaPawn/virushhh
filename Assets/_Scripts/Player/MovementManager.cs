@@ -1,13 +1,8 @@
 using DG.Tweening;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem.Processors;
 
 public class MovementManager : MonoBehaviour {
-
-    [Header("Visual")]
-    [SerializeField] private GameObject playerVisual;
-
     [Header("Joystick")]
     [SerializeField] private CustomFloatingJoystic _floatingJoystick;
 
@@ -16,7 +11,7 @@ public class MovementManager : MonoBehaviour {
     [SerializeField] private GameObject movingArea;
 
     [Header("Dashing Attributes")]
-    [SerializeField] private VirusShadow virusShadow;
+    [SerializeField] private ObjectBase dashingTarget;
     [SerializeField] private TrailRenderer trailRenderer;
     [SerializeField] private DrawingCircle drawingCircle;
     [SerializeField] private float shadowMovementSpeed;
@@ -35,13 +30,13 @@ public class MovementManager : MonoBehaviour {
     }
     private void OnPointerUp()
     {
-        transform.DOMove(virusShadow.GetPosition(), dashingDuration);
+        transform.DOMove(dashingTarget.GetPosition(), dashingDuration);
         StartCoroutine(Dash());
     }
 
     private void OnPointerDown()
     {
-        virusShadow.Show();
+        dashingTarget.Show();
     }
 
     private void Update()
@@ -58,28 +53,22 @@ public class MovementManager : MonoBehaviour {
         Vector3 movementVector = new Vector3(joystickDirectionVector.x, joystickDirectionVector.y, 0);
         // Move
         Vector3 pos = transform.position + movementVector * movementSpeed * Time.deltaTime;
-        transform.position = LimitPositionInsideArea(movingArea, playerVisual, pos);
+        transform.position = LimitPositionInsideArea(movingArea, dashingTarget.gameObject, pos);
         // Look at
         float angle = Mathf.Atan2(movementVector.y, movementVector.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
-        // Prepare for dashing
-        Vector3 shadowPos = virusShadow.GetPosition();
+        // Move shadow
+        Vector3 shadowPos = dashingTarget.GetPosition();
         Vector3 tempShadowPos = shadowPos + movementVector * shadowMovementSpeed * Time.deltaTime;
-        float distance = Vector3.Distance(tempShadowPos, transform.position) + GetObjectWidth(virusShadow.gameObject)/2;
-        if (distance <= drawingCircle.GetRadius())
-        {
-            virusShadow.SetPosition(LimitPositionInsideArea(movingArea, virusShadow.gameObject, tempShadowPos));
-        }
-        else
-        {
-            virusShadow.SetPosition(LimitPositionInsideArea(movingArea, virusShadow.gameObject, shadowPos));
-        }
+        float distance = Vector3.Distance(tempShadowPos, transform.position) + GetObjectWidth(dashingTarget.gameObject) / 2;
+        dashingTarget.SetPosition(LimitPositionInsideArea(movingArea, dashingTarget.gameObject,
+            distance <= drawingCircle.GetRadius() ? tempShadowPos : shadowPos));
     }
 
     private IEnumerator Dash()
     {
         //Play dash animation
-        virusShadow.Hide();
+        dashingTarget.Hide();
         trailRenderer.emitting = true;
         drawingCircle.HideCircle();
         //Wait for dash animation
