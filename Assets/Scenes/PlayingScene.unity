@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 142695707}
   - component: {fileID: 142695706}
   - component: {fileID: 142695705}
+  - component: {fileID: 142695708}
   m_Layer: 0
   m_Name: Virus
   m_TagString: Untagged
@@ -178,11 +179,6 @@ MonoBehaviour:
   _floatingJoystick: {fileID: 8154733521671886558}
   movementSpeed: 0.5
   movingArea: {fileID: 1920298158}
-  dashingTarget: {fileID: 0}
-  trailRenderer: {fileID: 1683319321}
-  drawingCircle: {fileID: 1988136235}
-  shadowMovementSpeed: 3
-  dashingDuration: 0.15
 --- !u!50 &142695706
 Rigidbody2D:
   serializedVersion: 4
@@ -255,6 +251,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &142695708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 142695702}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d76cd0dbaf47ca4b88111dbb3e497af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _floatingJoystick: {fileID: 8154733521671886558}
+  dashingTarget: {fileID: 1727023033}
+  trailRenderer: {fileID: 1683319321}
+  drawingCircle: {fileID: 1988136235}
+  dashingTargetMovementSpeed: 3
+  dashingDuration: 0.15
+  movingArea: {fileID: 1920298158}
 --- !u!1 &181306722
 GameObject:
   m_ObjectHideFlags: 0
@@ -856,7 +871,7 @@ GameObject:
   - component: {fileID: 1683319320}
   - component: {fileID: 1683319321}
   m_Layer: 0
-  m_Name: VirusTrail
+  m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1015,7 +1030,7 @@ GameObject:
   - component: {fileID: 1727023032}
   - component: {fileID: 1727023033}
   m_Layer: 0
-  m_Name: VirusShadow
+  m_Name: DashingTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1097,7 +1112,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1727023030}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d879ae1c650a614990d42436b6d71c1, type: 3}
+  m_Script: {fileID: 11500000, guid: a53044f0b64a3c949b2b2e36d2f60458, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1806315805
@@ -1145,7 +1160,7 @@ GameObject:
   - component: {fileID: 1920298159}
   m_Layer: 8
   m_Name: PlayingArea
-  m_TagString: Untagged
+  m_TagString: PlayingArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1363,7 +1378,7 @@ GameObject:
   - component: {fileID: 1988136234}
   - component: {fileID: 1988136235}
   m_Layer: 0
-  m_Name: DashingLimitedCircle
+  m_Name: LimitedDashingArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1414,7 +1429,7 @@ GameObject:
   - component: {fileID: 2017558049}
   - component: {fileID: 2017558050}
   m_Layer: 0
-  m_Name: VirusVisual
+  m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1500,7 +1515,7 @@ GameObject:
   - component: {fileID: 2137096465}
   - component: {fileID: 2137096466}
   m_Layer: 0
-  m_Name: LookDirection
+  m_Name: LookingArrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ObjectBase : MonoBehaviour {
+public class DashingTarget : MonoBehaviour {
     public void Hide()
     {
         gameObject.SetActive(false);
