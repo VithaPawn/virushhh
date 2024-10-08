@@ -1,3 +1,7 @@
 public static class GameConstants {
-    public string const PLAYING_AREA_TAG = "PlayingArea";
+
+    #region Tags
+    public const string  PLAYING_AREA_TAG = "PlayingArea";
+    public const string JOYSTICK_TAG = "Joystick";
+    #endregion Tags
 }

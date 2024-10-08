@@ -2,37 +2,45 @@ using System.Collections;
 using UnityEngine;
 
 public class DashingManager : MonoBehaviour {
-    [Header("Joystick")]
-    [SerializeField] private CustomFloatingJoystic _floatingJoystick;
-    [Header("Dashing Attributes")]
+    [Header("Visual")]
     [SerializeField] private DashingTarget dashingTarget;
     [SerializeField] private TrailRenderer trailRenderer;
     [SerializeField] private DrawingCircle drawingCircle;
+    [Header("Dashing Attributes")]
     [SerializeField] private float dashingTargetMovementSpeed;
     [SerializeField] private float dashingDuration;
+    private bool isDashing = false;
+    [Header("Ghosting Effect Attributes")]
+    [SerializeField] private float distanceBetweenEachGhost;
+    private Vector3 currentDashingPos;
 
-    private GameObject movingArea;
+    //private GhostingEffectManager ghostingEffectManager;
+    private GameObject movementAllowedArea;
+    private CustomFloatingJoystic floatingJoystick;
 
     private void Awake()
     {
-        movingArea = GameObject.FindGameObjectWithTag("");
+        movementAllowedArea = GameObject.FindGameObjectWithTag(GameConstants.PLAYING_AREA_TAG);
+        GameObject joystick = GameObject.FindGameObjectWithTag(GameConstants.JOYSTICK_TAG);
+        floatingJoystick = joystick.GetComponent<CustomFloatingJoystic>();
+        //ghostingEffectManager = GetComponent<GhostingEffectManager>();
     }
 
     private void OnEnable()
     {
-        _floatingJoystick.PointerUpEvent += OnPointerUp;
-        _floatingJoystick.PointerDownEvent += OnPointerDown;
+        floatingJoystick.PointerUpEvent += OnPointerUp;
+        floatingJoystick.PointerDownEvent += OnPointerDown;
     }
 
     private void OnDisable()
     {
-        _floatingJoystick.PointerUpEvent -= OnPointerUp;
-        _floatingJoystick.PointerDownEvent -= OnPointerDown;
+        floatingJoystick.PointerUpEvent -= OnPointerUp;
+        floatingJoystick.PointerDownEvent -= OnPointerDown;
     }
 
     private void OnPointerUp()
     {
-        StartCoroutine(Dash());
+        StartCoroutine(PlayDashEffect());
     }
 
     private void OnPointerDown()
@@ -40,15 +48,29 @@ public class DashingManager : MonoBehaviour {
         dashingTarget.Show();
     }
 
-    private IEnumerator Dash()
+    private void Update()
+    {
+        if (isDashing && Vector3.Distance(transform.position, currentDashingPos) >= distanceBetweenEachGhost)
+        {
+            currentDashingPos = transform.position;
+            //ghostingEffectManager.GenerateGhost(transform.position, 0.3f);
+        }
+    }
+
+    private IEnumerator PlayDashEffect()
     {
         //Play dash animation
         dashingTarget.Hide();
+        currentDashingPos = transform.position;
+        isDashing = true;
         trailRenderer.emitting = true;
         drawingCircle.HideCircle();
+
         //Wait for dash animation
         yield return new WaitForSeconds(dashingDuration);
+
         //Reset dashing variables
+        isDashing = false;
         trailRenderer.emitting = false;
         drawingCircle.ShowCircle();
     }
@@ -58,7 +80,7 @@ public class DashingManager : MonoBehaviour {
         Vector3 dashingTargetPos = dashingTarget.GetPosition();
         Vector3 tempDashingTargetPos = dashingTargetPos + movementVector * dashingTargetMovementSpeed * Time.deltaTime;
         float distance = Vector3.Distance(tempDashingTargetPos, transform.position) + MovementUtilities.GetObjectWidth(GetDashingTargetObj()) / 2;
-        dashingTarget.SetPosition(MovementUtilities.LimitPositionInsideArea(movingArea, GetDashingTargetObj(),
+        dashingTarget.SetPosition(MovementUtilities.LimitPositionInsideArea(movementAllowedArea, GetDashingTargetObj(),
             distance <= drawingCircle.GetRadius() ? tempDashingTargetPos : dashingTargetPos));
     }
 
