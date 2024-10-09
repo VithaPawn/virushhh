@@ -10,11 +10,7 @@ public class DashingManager : MonoBehaviour {
     [SerializeField] private float dashingTargetMovementSpeed;
     [SerializeField] private float dashingDuration;
     private bool isDashing = false;
-    [Header("Ghosting Effect Attributes")]
-    [SerializeField] private float distanceBetweenEachGhost;
-    private Vector3 currentDashingPos;
 
-    //private GhostingEffectManager ghostingEffectManager;
     private GameObject movementAllowedArea;
     private CustomFloatingJoystic floatingJoystick;
 
@@ -23,7 +19,6 @@ public class DashingManager : MonoBehaviour {
         movementAllowedArea = GameObject.FindGameObjectWithTag(GameConstants.PLAYING_AREA_TAG);
         GameObject joystick = GameObject.FindGameObjectWithTag(GameConstants.JOYSTICK_TAG);
         floatingJoystick = joystick.GetComponent<CustomFloatingJoystic>();
-        //ghostingEffectManager = GetComponent<GhostingEffectManager>();
     }
 
     private void OnEnable()
@@ -48,20 +43,10 @@ public class DashingManager : MonoBehaviour {
         dashingTarget.Show();
     }
 
-    private void Update()
-    {
-        if (isDashing && Vector3.Distance(transform.position, currentDashingPos) >= distanceBetweenEachGhost)
-        {
-            currentDashingPos = transform.position;
-            //ghostingEffectManager.GenerateGhost(transform.position, 0.3f);
-        }
-    }
-
     private IEnumerator PlayDashEffect()
     {
         //Play dash animation
         dashingTarget.Hide();
-        currentDashingPos = transform.position;
         isDashing = true;
         trailRenderer.emitting = true;
         drawingCircle.HideCircle();
