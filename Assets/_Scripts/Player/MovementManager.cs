@@ -1,5 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
+[RequireComponent(typeof(DashingManager))]
 
 public class MovementManager : MonoBehaviour {
     [Header("Movement Attributes")]
