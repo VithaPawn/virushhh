@@ -64,14 +64,24 @@ public class DashingManager : MonoBehaviour {
     {
         Vector3 dashingTargetPos = dashingTarget.GetPosition();
         Vector3 tempDashingTargetPos = dashingTargetPos + movementVector * dashingTargetMovementSpeed * Time.deltaTime;
-        float distance = Vector3.Distance(tempDashingTargetPos, transform.position) + MovementUtilities.GetObjectWidth(GetDashingTargetObj()) / 2;
-        dashingTarget.SetPosition(MovementUtilities.LimitPositionInsideArea(movementAllowedArea, GetDashingTargetObj(),
+        
+        //Get dashing target width
+        Renderer objRenderer = dashingTarget.gameObject.GetComponent<Renderer>();
+        float dashingTargetWidth = objRenderer ? objRenderer.bounds.size.x : 0;
+
+        float distance = Vector3.Distance(tempDashingTargetPos, transform.position) + dashingTargetWidth / 2;
+        dashingTarget.SetPosition(MovementUtilities.LimitPositionInsideArea(movementAllowedArea, dashingTarget.gameObject,
             distance <= drawingCircle.GetRadius() ? tempDashingTargetPos : dashingTargetPos));
     }
 
-    public Vector3 GetDashingTargetPos() { return dashingTarget.GetPosition(); }
+
+    private float GetObjectWidth(GameObject obj)
+    {
+        Renderer objRenderer = obj.GetComponent<Renderer>();
+        return objRenderer ? objRenderer.bounds.size.x : 0;
+    }
+
+    public DashingTarget GetDashingTarget() { return dashingTarget; }
 
     public float GetDashingDuration() { return dashingDuration; }
-
-    public GameObject GetDashingTargetObj() { return dashingTarget.gameObject; }
 }

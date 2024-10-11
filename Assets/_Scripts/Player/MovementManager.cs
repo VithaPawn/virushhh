@@ -29,7 +29,7 @@ public class MovementManager : MonoBehaviour {
     }
     private void OnPointerUp()
     {
-        transform.DOMove(dashingManager.GetDashingTargetPos(), dashingManager.GetDashingDuration());
+        transform.DOMove(dashingManager.GetDashingTarget().GetPosition(), dashingManager.GetDashingDuration());
     }
 
     private void Update()
@@ -46,7 +46,7 @@ public class MovementManager : MonoBehaviour {
         Vector3 movementVector = new Vector3(joystickDirectionVector.x, joystickDirectionVector.y, 0);
         // Move
         Vector3 pos = transform.position + movementVector * movementSpeed * Time.deltaTime;
-        transform.position = MovementUtilities.LimitPositionInsideArea(movementAllowedArea, dashingManager.GetDashingTargetObj(), pos);
+        transform.position = MovementUtilities.LimitPositionInsideArea(movementAllowedArea, dashingManager.GetDashingTarget().gameObject, pos);
         // Look at
         float angle = Mathf.Atan2(movementVector.y, movementVector.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, angle);
