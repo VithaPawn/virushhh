@@ -9,7 +9,6 @@ public class DashingManager : MonoBehaviour {
     [Header("Dashing Attributes")]
     [SerializeField] private float dashingTargetMovementSpeed;
     [SerializeField] private float dashingDuration;
-    private bool isDashing = false;
 
     private GameObject movementAllowedArea;
     private CustomFloatingJoystic floatingJoystick;
@@ -47,7 +46,6 @@ public class DashingManager : MonoBehaviour {
     {
         //Play dash animation
         dashingTarget.Hide();
-        isDashing = true;
         trailRenderer.emitting = true;
         drawingCircle.HideCircle();
 
@@ -55,7 +53,6 @@ public class DashingManager : MonoBehaviour {
         yield return new WaitForSeconds(dashingDuration);
 
         //Reset dashing variables
-        isDashing = false;
         trailRenderer.emitting = false;
         drawingCircle.ShowCircle();
     }
@@ -64,7 +61,7 @@ public class DashingManager : MonoBehaviour {
     {
         Vector3 dashingTargetPos = dashingTarget.GetPosition();
         Vector3 tempDashingTargetPos = dashingTargetPos + movementVector * dashingTargetMovementSpeed * Time.deltaTime;
-        
+
         //Get dashing target width
         Renderer objRenderer = dashingTarget.gameObject.GetComponent<Renderer>();
         float dashingTargetWidth = objRenderer ? objRenderer.bounds.size.x : 0;

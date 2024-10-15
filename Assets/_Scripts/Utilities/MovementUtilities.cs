@@ -10,8 +10,8 @@ public static class MovementUtilities {
         float objWidth = objRenderer ? objRenderer.bounds.size.x : 0;
         float objHeight = objRenderer ? objRenderer.bounds.size.y : 0;
         //Limit position inside area
-        limitedPos.x = Mathf.Clamp(limitedPos.x, areaBounds.min.x + objWidth, areaBounds.max.x - objWidth);
-        limitedPos.y = Mathf.Clamp(limitedPos.y, areaBounds.min.y + objHeight, areaBounds.max.y - objHeight);
+        limitedPos.x = Mathf.Clamp(limitedPos.x, areaBounds.min.x + objWidth / 2, areaBounds.max.x - objWidth / 2);
+        limitedPos.y = Mathf.Clamp(limitedPos.y, areaBounds.min.y + objHeight / 2, areaBounds.max.y - objHeight / 2);
         return limitedPos;
     }
 
