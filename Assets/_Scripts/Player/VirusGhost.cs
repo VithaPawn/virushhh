@@ -53,9 +53,6 @@ public class VirusGhost : MonoBehaviour {
     public IEnumerator DeactivateCoroutine(float fadeTime)
     {
         yield return new WaitForSeconds(fadeTime);
-
-
-
         ParentShadowPool.Release(this);
     }
 

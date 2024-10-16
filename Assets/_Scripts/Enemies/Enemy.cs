@@ -7,11 +7,13 @@ public class Enemy : MonoBehaviour {
     [SerializeField] private float movementSpeed;
     [SerializeField] private bool canMove = true;
 
+    private GameObject player;
     private Vector3 movementDestination;
     private Vector3 movementDirection;
 
     private void Awake()
     {
+        player = GameObject.FindGameObjectWithTag(GameConstants.PLAYER_TAG);
         movementAllowedArea = GameObject.FindGameObjectWithTag(GameConstants.PLAYING_AREA_TAG);
     }
 
@@ -24,11 +26,16 @@ public class Enemy : MonoBehaviour {
     {
         if (canMove)
         {
+            //Move
             transform.position += movementDirection * Time.deltaTime * movementSpeed;
             if (Vector3.Distance(movementDestination, transform.position) <= CLOSET_DISTANCE_BEFORE_CHANGE_DIRECTION)
             {
                 SetNewDestination();
             }
+            //Look at
+            Quaternion lookingQuater = MovementUtilities.Rotate2dByTargetPosition(
+                player.transform.position, transform.position);
+            transform.rotation = lookingQuater;
         }
     }
 

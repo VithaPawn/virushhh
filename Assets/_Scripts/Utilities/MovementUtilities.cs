@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public static class MovementUtilities {
     public static Vector3 LimitPositionInsideArea(GameObject area, GameObject obj, Vector3 pos)
@@ -29,6 +30,13 @@ public static class MovementUtilities {
     {
         Renderer objRenderer = obj.GetComponent<Renderer>();
         return objRenderer ? objRenderer.bounds : new Bounds(Vector3.zero, Vector3.zero);
+    }
+
+    public static Quaternion Rotate2dByTargetPosition(Vector3 targetPos, Vector3 ownerPos)
+    {
+        Vector3 lookingVector = (targetPos - ownerPos).normalized;
+        float angle = Mathf.Atan2(lookingVector.y, lookingVector.x) * Mathf.Rad2Deg;
+        return Quaternion.Euler(0, 0, angle);
     }
 
 }
