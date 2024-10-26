@@ -7,13 +7,13 @@ public class Enemy : MonoBehaviour {
     [SerializeField] private float movementSpeed;
     [SerializeField] private bool canMove = true;
 
-    private GameObject player;
+    public GameObject Target { get; private set; }
     private Vector3 movementDestination;
     private Vector3 movementDirection;
 
     private void Awake()
     {
-        player = GameObject.FindGameObjectWithTag(GameConstants.PLAYER_TAG);
+        Target = GameObject.FindGameObjectWithTag(GameConstants.PLAYER_TAG);
         movementAllowedArea = GameObject.FindGameObjectWithTag(GameConstants.PLAYING_AREA_TAG);
     }
 
@@ -34,7 +34,7 @@ public class Enemy : MonoBehaviour {
             }
             //Look at
             Quaternion lookingQuater = MovementUtilities.Rotate2dByTargetPosition(
-                player.transform.position, transform.position);
+                Target.transform.position, transform.position);
             transform.rotation = lookingQuater;
         }
     }
@@ -46,9 +46,11 @@ public class Enemy : MonoBehaviour {
         movementDirection.Normalize();
     }
 
-    private void OnDrawGizmos()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, movementDestination);
+        if (collision.TryGetComponent(out Virus virus))
+        {
+            Destroy(gameObject);
+        }
     }
 }
