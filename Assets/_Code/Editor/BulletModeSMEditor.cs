@@ -5,7 +5,7 @@ public class BulletModeSMEditor : Editor {
 
     #region SerializeProperty
     SerializedProperty bulletPrefab;
-    SerializedProperty delayTime;
+    SerializedProperty reloadTime;
     SerializedProperty shootingDirectionNumber;
     SerializedProperty shootingMode;
     SerializedProperty burstTime;
@@ -15,7 +15,7 @@ public class BulletModeSMEditor : Editor {
     private void OnEnable()
     {
         bulletPrefab = serializedObject.FindProperty("bulletPrefab");
-        delayTime = serializedObject.FindProperty("delayTime");
+        reloadTime = serializedObject.FindProperty("reloadTime");
         shootingDirectionNumber = serializedObject.FindProperty("shootingDirectionNumber");
         shootingMode = serializedObject.FindProperty("shootingMode");
         burstTime = serializedObject.FindProperty("burstTime");
@@ -29,7 +29,7 @@ public class BulletModeSMEditor : Editor {
         BulletModeSM bulletMode = (BulletModeSM)target;
 
         EditorGUILayout.PropertyField(bulletPrefab);
-        EditorGUILayout.PropertyField(delayTime);
+        EditorGUILayout.PropertyField(reloadTime);
         EditorGUILayout.PropertyField(shootingDirectionNumber);
         EditorGUILayout.PropertyField(shootingMode);
         if (bulletMode.shootingMode == BulletModeSM.ShootingMode.Burst)

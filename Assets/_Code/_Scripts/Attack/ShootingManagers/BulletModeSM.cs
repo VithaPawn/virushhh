@@ -1,17 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class BulletModeSM : BaseShootingManager {
-    [Header("Shooting Dỉrection Number")]
     [SerializeField] private int shootingDirectionNumber;
+    
+    [Header("Bullet Attributes")]
+    [SerializeField] private BaseBullet bulletPrefab;
+    private IObjectPool<BaseBullet> bulletPool;
+
     [Header("Shooting Mode")]
     public ShootingMode shootingMode;
     [SerializeField] private float burstTime;
     [SerializeField] private int bulletNumberEachBurst;
+    private List<Vector3> shootingDirectionList;
 
     private GameObject target;
-    private List<Vector3> shootingDirectionList;
 
     private void Awake()
     {
@@ -26,16 +31,47 @@ public class BulletModeSM : BaseShootingManager {
         Shoot();
     }
 
-    protected override void Shoot()
+    #region ObjectPool
+    protected void InitializeBulletPool()
     {
-        StartCoroutine(ShootInTurns());
+        bulletPool = new ObjectPool<BaseBullet>(CreateBullet, OnGetBulletFromPool, OnReleaseBulletToPool, OnDestroyBullet, defaultCapacity: 2, maxSize: 100);
     }
 
+    protected BaseBullet CreateBullet()
+    {
+        BaseBullet bullet = Instantiate(bulletPrefab);
+        bullet.ParentBulletPool = bulletPool;
+        return bullet;
+    }
 
-    private IEnumerator ShootInTurns()
+    protected void OnGetBulletFromPool(BaseBullet bullet)
+    {
+        bullet.Show();
+    }
+
+    protected void OnReleaseBulletToPool(BaseBullet bullet)
+    {
+        bullet.Hide();
+    }
+
+    protected void OnDestroyBullet(BaseBullet bullet)
+    {
+        Destroy(bullet);
+    }
+    #endregion ObjectPool
+
+    #region Shoot
+
+    protected override void Shoot()
+    {
+        StartCoroutine(ShootBulletAtIntervals());
+    }
+
+    private IEnumerator ShootBulletAtIntervals()
     {
         while (canShoot)
         {
+            yield return new WaitForSeconds(reloadTime);
             shootingDirectionList = GenerateDirectionList(shootingDirectionList, shootingDirectionNumber);
             switch (shootingMode)
             {
@@ -49,7 +85,6 @@ public class BulletModeSM : BaseShootingManager {
                     ShootSingle();
                     break;
             }
-            yield return new WaitForSeconds(delayTime);
         }
     }
 
@@ -90,6 +125,10 @@ public class BulletModeSM : BaseShootingManager {
         bullet.DeactivateAfterSeconds();
     }
 
+    #endregion Shoot
+
+    #region Helpers
+
     private List<Vector3> GenerateDirectionList(List<Vector3> directionList, int directionNumber)
     {
         directionList.Clear();
@@ -109,13 +148,16 @@ public class BulletModeSM : BaseShootingManager {
 
     private float GetLookingAngle(Vector3 targetPosition)
     {
-        Vector3 direction = (targetPosition - transform.position).normalized;
-        float angle = Mathf.Atan2(direction.y, direction.x); // For 2D, use y and x.
+        Vector3 lookingVector = (targetPosition - transform.position).normalized;
+        float angle = Mathf.Atan2(lookingVector.y, lookingVector.x); // For 2D, use y and x.
         return angle; // Angle in radians
     }
+
+    #endregion Helpers
 
     public enum ShootingMode {
         Single,
         Burst
     }
+
 }
