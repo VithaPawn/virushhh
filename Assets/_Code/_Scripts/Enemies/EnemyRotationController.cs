@@ -1,7 +1,13 @@
 using UnityEngine;
 
 public class EnemyRotationController : MonoBehaviour {
-    [SerializeField] private FocusMode focusMode;
+    private enum RotationMode {
+        Fixed = 0, // The enemy does not rotate
+        TargetFocusing = 1, // The enemy rotate follow player
+        Rotation = 2 // The enemy rotate continuously 
+    }
+
+    [SerializeField] private RotationMode rotationMode;
     [SerializeField] private float rotationSpeed;
 
     private GameObject target;
@@ -18,12 +24,12 @@ public class EnemyRotationController : MonoBehaviour {
 
     private void ControlLookingBehavior()
     {
-        switch (focusMode)
+        switch (rotationMode)
         {
-            case FocusMode.None:
+            case RotationMode.Fixed:
                 break;
 
-            case FocusMode.TargetFocusing:
+            case RotationMode.TargetFocusing:
                 Vector3 lookingDirection = (target.transform.position - transform.position).normalized;
                 float targetAngle = Mathf.Atan2(lookingDirection.y, lookingDirection.x) * Mathf.Rad2Deg;
                 float currentAngle = transform.rotation.eulerAngles.z;
@@ -32,19 +38,17 @@ public class EnemyRotationController : MonoBehaviour {
                 transform.rotation = Quaternion.Euler(0, 0, newAngle);
                 break;
 
-            case FocusMode.Rotation:
+            case RotationMode.Rotation:
                 transform.Rotate(Vector3.forward, rotationSpeed * Time.deltaTime);
                 break;
+
             default:
                 break;
         }
     }
 
-    public void SetFocusMode(FocusMode mode) { focusMode = mode; }
+    public void ChangeToFixedMode() { rotationMode = RotationMode.Fixed; }
 
-    public enum FocusMode {
-        None = 0, // The enemy does not rotate
-        TargetFocusing = 1, // The enemy rotate follow player
-        Rotation = 2 // The enemy rotate continuously 
-    }
+    public void ChangeToFocusMode() { rotationMode = RotationMode.TargetFocusing; }
+
 }

@@ -4,37 +4,42 @@ using UnityEngine;
 using UnityEngine.Pool;
 
 public class BulletModeSM : BaseShootingManager {
+
+    public enum ShootingMode {
+        Single,
+        Burst
+    }
+
+    #region VARIABLES
     [SerializeField] private int shootingDirectionNumber;
+    private List<Vector3> shootingDirectionList;
 
     [Header("Bullet Attributes")]
     [SerializeField] private BaseBullet bulletPrefab;
-    [SerializeField] private GameObject bulletStorage;
+    private GameObject bulletStorage;
     private IObjectPool<BaseBullet> bulletPool;
 
     [Header("Shooting Mode")]
     public ShootingMode shootingMode;
     [SerializeField] private float burstTime;
     [SerializeField] private int bulletNumberEachBurst;
-    private List<Vector3> shootingDirectionList;
-
-    private GameObject target;
+    #endregion VARIABLES
 
     private void Awake()
     {
-        if (!bulletStorage)
-        {
-            bulletStorage = GameObject.FindWithTag(GameConstants.BULLET_STORAGE_TAG);
-            if (!bulletStorage) bulletStorage = new GameObject("BulletStorage");
-            bulletStorage.tag = GameConstants.BULLET_STORAGE_TAG;
-        }
+        //Get bullet storage (which store bullet objects)
+        bulletStorage = GameObject.FindWithTag(GameConstants.BULLET_STORAGE_TAG);
+        //If not, create it
+        if (!bulletStorage) bulletStorage = new GameObject("BulletStorage");
+        bulletStorage.tag = GameConstants.BULLET_STORAGE_TAG;
+        
+        //Initialize other class variables
         InitializeBulletPool();
         shootingDirectionList = new List<Vector3>();
-        target = GameObject.FindGameObjectWithTag(GameConstants.PLAYER_TAG);
     }
 
     private void Start()
     {
-        if (!target) return;
         Shoot();
     }
 
@@ -156,14 +161,9 @@ public class BulletModeSM : BaseShootingManager {
     private float GetLookingAngle()
     {
         Vector3 lookingVector = transform.right;
-        float angle = Mathf.Atan2(lookingVector.y, lookingVector.x); // For 2D, use y and x.
+        float angle = Mathf.Atan2(lookingVector.y, lookingVector.x);
         return angle; // Angle in radians
     }
+
     #endregion Helpers
-
-    public enum ShootingMode {
-        Single,
-        Burst
-    }
-
 }

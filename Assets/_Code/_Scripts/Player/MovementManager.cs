@@ -4,10 +4,12 @@ using UnityEngine;
 public class MovementManager : MonoBehaviour {
     [Header("Movement Attributes")]
     [SerializeField] private float movementSpeed;
-    
+    //[SerializeField] private 
+
     private GameObject movementAllowedArea;
     private CustomFloatingJoystic floatingJoystick;
     private DashingManager dashingManager;
+
 
     private void Awake()
     {

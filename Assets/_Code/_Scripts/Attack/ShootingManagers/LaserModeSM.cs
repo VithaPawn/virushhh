@@ -12,21 +12,19 @@ public class LaserModeSM : BaseShootingManager {
     [SerializeField] private float disapearTimeAfterFire;
 
     private LineRenderer laserRenderer;
-    private GameObject target;
     private EnemyRotationController rotationController;
     private Vector2 laserDirection;
 
     private void Awake()
     {
         laserRenderer = GetComponent<LineRenderer>();
-        target = GameObject.FindGameObjectWithTag(GameConstants.PLAYER_TAG);
         rotationController = GetComponent<EnemyRotationController>();
     }
 
     private void Start()
     {
         laserRenderer.enabled = false;
-        if (!target || !rotationController) return;
+        if (!rotationController) return;
         Shoot();
     }
 
@@ -42,7 +40,7 @@ public class LaserModeSM : BaseShootingManager {
             //Draw laser line
             yield return new WaitForSeconds(reloadTime);
             laserRenderer.enabled = true;
-            rotationController.SetFocusMode(EnemyRotationController.FocusMode.None);
+            rotationController.ChangeToFixedMode();
             DrawLaserRay();
 
             //Fire laser
@@ -74,7 +72,7 @@ public class LaserModeSM : BaseShootingManager {
         DOLineWidth(laserRenderer, 0f, disapearTimeAfterFire);
         yield return new WaitForSeconds(disapearTimeAfterFire);
         laserRenderer.enabled = false;
-        rotationController.SetFocusMode(EnemyRotationController.FocusMode.TargetFocusing);
+        rotationController.ChangeToFocusMode();
     }
 
     private void DealDamage()

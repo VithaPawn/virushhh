@@ -451,7 +451,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &494895787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -464,8 +464,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f26c0a50c3d79db478e42a79f621d87e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canMove: 1
+  movementMode: 0
   movementSpeed: 0.7
+  reloadTime: 0
+  rushDistance: 0
+  rushTime: 0
 --- !u!61 &494895788
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -591,11 +594,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79bcf4e9de36a6241a7b57334576064b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canShoot: 1
+  canShoot: 0
   reloadTime: 2
   shootingDirectionNumber: 5
   bulletPrefab: {fileID: 7656644992498591490, guid: 345a810d05b383945813c798fc011161, type: 3}
-  bulletStorage: {fileID: 0}
   shootingMode: 0
   burstTime: 0.2
   bulletNumberEachBurst: 3
@@ -611,7 +613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d40c2ad36c3de044863edd5022977d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  focusMode: 1
+  rotationMode: 0
   rotationSpeed: 150
 --- !u!1 &519420028
 GameObject:
@@ -1071,7 +1073,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1267066422
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1152,8 +1154,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f26c0a50c3d79db478e42a79f621d87e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canMove: 1
+  movementMode: 0
   movementSpeed: 0.7
+  reloadTime: 0
+  rushDistance: 0
+  rushTime: 0
 --- !u!61 &1267066427
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1211,11 +1216,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79bcf4e9de36a6241a7b57334576064b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canShoot: 1
+  canShoot: 0
   reloadTime: 1.6
   shootingDirectionNumber: 1
   bulletPrefab: {fileID: 7656644992498591490, guid: 345a810d05b383945813c798fc011161, type: 3}
-  bulletStorage: {fileID: 0}
   shootingMode: 1
   burstTime: 0.2
   bulletNumberEachBurst: 3
@@ -1231,7 +1235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d40c2ad36c3de044863edd5022977d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  focusMode: 1
+  rotationMode: 0
   rotationSpeed: 150
 --- !u!1 &1403806851
 GameObject:
@@ -1288,7 +1292,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1480935848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1301,8 +1305,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f26c0a50c3d79db478e42a79f621d87e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canMove: 0
+  movementMode: 0
   movementSpeed: 1
+  reloadTime: 0
+  rushDistance: 0
+  rushTime: 0
 --- !u!61 &1480935849
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1428,7 +1435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1f5517278e3e4c4e83f0e0024fc90a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canShoot: 1
+  canShoot: 0
   reloadTime: 3
   laserLength: 12
   chargingTime: 1
@@ -1550,7 +1557,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d40c2ad36c3de044863edd5022977d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  focusMode: 1
+  rotationMode: 2
   rotationSpeed: 150
 --- !u!1 &1683319319
 GameObject:
@@ -2041,11 +2048,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79bcf4e9de36a6241a7b57334576064b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canShoot: 1
+  canShoot: 0
   reloadTime: 1.6
   shootingDirectionNumber: 1
   bulletPrefab: {fileID: 7656644992498591490, guid: 345a810d05b383945813c798fc011161, type: 3}
-  bulletStorage: {fileID: 0}
   shootingMode: 0
   burstTime: 0.15
   bulletNumberEachBurst: 3
@@ -2061,7 +2067,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d40c2ad36c3de044863edd5022977d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  focusMode: 2
+  rotationMode: 1
   rotationSpeed: 150
 --- !u!114 &1872804069
 MonoBehaviour:
@@ -2075,8 +2081,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f26c0a50c3d79db478e42a79f621d87e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canMove: 1
+  movementMode: 0
   movementSpeed: 0.7
+  reloadTime: 3
+  rushDistance: 3
+  rushTime: 1.5
 --- !u!61 &1872804070
 BoxCollider2D:
   m_ObjectHideFlags: 0
