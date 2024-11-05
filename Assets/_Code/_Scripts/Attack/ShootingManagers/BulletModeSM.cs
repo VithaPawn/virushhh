@@ -5,9 +5,10 @@ using UnityEngine.Pool;
 
 public class BulletModeSM : BaseShootingManager {
     [SerializeField] private int shootingDirectionNumber;
-    
+
     [Header("Bullet Attributes")]
     [SerializeField] private BaseBullet bulletPrefab;
+    [SerializeField] private GameObject bulletStorage;
     private IObjectPool<BaseBullet> bulletPool;
 
     [Header("Shooting Mode")]
@@ -20,14 +21,20 @@ public class BulletModeSM : BaseShootingManager {
 
     private void Awake()
     {
+        if (!bulletStorage)
+        {
+            bulletStorage = GameObject.FindWithTag(GameConstants.BULLET_STORAGE_TAG);
+            if (!bulletStorage) bulletStorage = new GameObject("BulletStorage");
+            bulletStorage.tag = GameConstants.BULLET_STORAGE_TAG;
+        }
         InitializeBulletPool();
-        target = GameObject.FindGameObjectWithTag(GameConstants.PLAYER_TAG);
-        canShoot = true;
         shootingDirectionList = new List<Vector3>();
+        target = GameObject.FindGameObjectWithTag(GameConstants.PLAYER_TAG);
     }
 
     private void Start()
     {
+        if (!target) return;
         Shoot();
     }
 
@@ -39,7 +46,7 @@ public class BulletModeSM : BaseShootingManager {
 
     protected BaseBullet CreateBullet()
     {
-        BaseBullet bullet = Instantiate(bulletPrefab);
+        BaseBullet bullet = Instantiate(bulletPrefab, bulletStorage.transform);
         bullet.ParentBulletPool = bulletPool;
         return bullet;
     }
@@ -72,7 +79,6 @@ public class BulletModeSM : BaseShootingManager {
         while (canShoot)
         {
             yield return new WaitForSeconds(reloadTime);
-            shootingDirectionList = GenerateDirectionList(shootingDirectionList, shootingDirectionNumber);
             switch (shootingMode)
             {
                 case ShootingMode.Single:
@@ -90,6 +96,7 @@ public class BulletModeSM : BaseShootingManager {
 
     private void ShootSingle()
     {
+        shootingDirectionList = GenerateDirectionList(shootingDirectionList, shootingDirectionNumber);
         for (int i = 0; i < shootingDirectionNumber; i++)
         {
             PushBulletTowardDirection(shootingDirectionList[i]);
@@ -132,7 +139,7 @@ public class BulletModeSM : BaseShootingManager {
     private List<Vector3> GenerateDirectionList(List<Vector3> directionList, int directionNumber)
     {
         directionList.Clear();
-        float lookingAngle = GetLookingAngle(target.transform.position);
+        float lookingAngle = GetLookingAngle();
         float angleStep = 2f * Mathf.PI / directionNumber;
         for (int i = 0; i < directionNumber; i++)
         {
@@ -146,13 +153,12 @@ public class BulletModeSM : BaseShootingManager {
         return directionList;
     }
 
-    private float GetLookingAngle(Vector3 targetPosition)
+    private float GetLookingAngle()
     {
-        Vector3 lookingVector = (targetPosition - transform.position).normalized;
+        Vector3 lookingVector = transform.right;
         float angle = Mathf.Atan2(lookingVector.y, lookingVector.x); // For 2D, use y and x.
         return angle; // Angle in radians
     }
-
     #endregion Helpers
 
     public enum ShootingMode {

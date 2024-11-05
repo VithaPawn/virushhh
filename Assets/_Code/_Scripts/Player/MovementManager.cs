@@ -47,7 +47,7 @@ public class MovementManager : MonoBehaviour {
         Vector3 pos = transform.position + movementVector * movementSpeed * Time.deltaTime;
         transform.position = MovementUtilities.LimitPositionInsideArea(movementAllowedArea, dashingManager.GetDashingTarget().gameObject, pos);
         // Look at
-        Quaternion lookingQuater = MovementUtilities.Rotate2dByTargetPosition(
+        Quaternion lookingQuater = MovementUtilities.GetQuaternionByTargetPosition(
             dashingManager.GetDashingTarget().transform.position, transform.position);
         transform.rotation = lookingQuater;
         // Move dashing target

@@ -4,6 +4,7 @@ using UnityEditor;
 public class BulletModeSMEditor : Editor {
 
     #region SerializeProperty
+    SerializedProperty canShoot;
     SerializedProperty bulletPrefab;
     SerializedProperty reloadTime;
     SerializedProperty shootingDirectionNumber;
@@ -14,6 +15,7 @@ public class BulletModeSMEditor : Editor {
 
     private void OnEnable()
     {
+        canShoot = serializedObject.FindProperty("canShoot");
         bulletPrefab = serializedObject.FindProperty("bulletPrefab");
         reloadTime = serializedObject.FindProperty("reloadTime");
         shootingDirectionNumber = serializedObject.FindProperty("shootingDirectionNumber");
@@ -28,6 +30,7 @@ public class BulletModeSMEditor : Editor {
 
         BulletModeSM bulletMode = (BulletModeSM)target;
 
+        EditorGUILayout.PropertyField(canShoot); 
         EditorGUILayout.PropertyField(bulletPrefab);
         EditorGUILayout.PropertyField(reloadTime);
         EditorGUILayout.PropertyField(shootingDirectionNumber);

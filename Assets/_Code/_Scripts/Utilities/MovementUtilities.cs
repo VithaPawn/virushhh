@@ -32,11 +32,10 @@ public static class MovementUtilities {
         return objRenderer ? objRenderer.bounds : new Bounds(Vector3.zero, Vector3.zero);
     }
 
-    public static Quaternion Rotate2dByTargetPosition(Vector3 targetPos, Vector3 ownerPos)
+    public static Quaternion GetQuaternionByTargetPosition(Vector3 targetPos, Vector3 ownerPos)
     {
         Vector3 lookingVector = (targetPos - ownerPos).normalized;
         float angle = Mathf.Atan2(lookingVector.y, lookingVector.x) * Mathf.Rad2Deg;
         return Quaternion.Euler(0, 0, angle);
     }
-
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayingArea
   - Joystick
+  - BulletStorage
   layers:
   - Default
   - TransparentFX
