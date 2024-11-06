@@ -1,7 +1,8 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
-public class DashingManager : MonoBehaviour {
+public class VirusDashingController : MonoBehaviour {
     [Header("Visual")]
     [SerializeField] private DashingTarget dashingTarget;
     [SerializeField] private TrailRenderer trailRenderer;
@@ -34,6 +35,7 @@ public class DashingManager : MonoBehaviour {
 
     private void OnPointerUp()
     {
+        transform.DOMove(dashingTarget.GetPosition(), dashingDuration);
         StartCoroutine(PlayDashEffect());
     }
 
@@ -42,7 +44,22 @@ public class DashingManager : MonoBehaviour {
         dashingTarget.Show();
     }
 
-    private IEnumerator PlayDashEffect()
+    private void Update()
+    {
+        if (floatingJoystick.Direction != Vector2.zero)
+        {
+            HandleMovement();
+        }
+    }
+
+    private void HandleMovement()
+    {
+        Vector2 joystickDirectionVector = floatingJoystick.Direction.normalized;
+        Vector3 movementVector = new Vector3(joystickDirectionVector.x, joystickDirectionVector.y, 0);
+        MoveDashingTarget(movementVector);
+    }
+
+        private IEnumerator PlayDashEffect()
     {
         //Play dash animation
         dashingTarget.Hide();
@@ -57,7 +74,7 @@ public class DashingManager : MonoBehaviour {
         drawingCircle.ShowCircle();
     }
 
-    public void MoveDashingTarget(Vector3 movementVector)
+    private void MoveDashingTarget(Vector3 movementVector)
     {
         Vector3 dashingTargetPos = dashingTarget.GetPosition();
         Vector3 tempDashingTargetPos = dashingTargetPos + movementVector * dashingTargetMovementSpeed * Time.deltaTime;
@@ -79,6 +96,4 @@ public class DashingManager : MonoBehaviour {
     }
 
     public DashingTarget GetDashingTarget() { return dashingTarget; }
-
-    public float GetDashingDuration() { return dashingDuration; }
 }
