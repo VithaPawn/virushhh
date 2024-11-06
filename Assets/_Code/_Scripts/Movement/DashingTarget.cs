@@ -1,6 +1,21 @@
 using UnityEngine;
 
 public class DashingTarget : MonoBehaviour {
+
+    [Header("Event Channels")]
+    [SerializeField] private VoidEventChannelSO startDashingSO;
+    [SerializeField] private VoidEventChannelSO endDashingSO;
+
+    private void OnEnable()
+    {
+        startDashingSO.OnEventRaised += Hide;
+    }
+
+    private void OnDisable()
+    {
+        startDashingSO.OnEventRaised -= Hide;
+    }
+
     public void Hide()
     {
         gameObject.SetActive(false);

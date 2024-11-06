@@ -97,14 +97,6 @@ public class EnemyMovementController : MonoBehaviour {
         transform.DOMove(targetPosition, rushTime);
     }
 
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.TryGetComponent(out Virus virus))
-    //    {
-    //        Destroy(gameObject);
-    //    }
-    //}
-
     private void GenerateDestination()
     {
         movementDestination = MovementUtilities.GenerateRandomVectorInsideArea(movementAllowedArea);

@@ -5,11 +5,13 @@ using UnityEngine;
 public class VirusDashingController : MonoBehaviour {
     [Header("Visual")]
     [SerializeField] private DashingTarget dashingTarget;
-    [SerializeField] private TrailRenderer trailRenderer;
     [SerializeField] private DrawingCircle drawingCircle;
     [Header("Dashing Attributes")]
     [SerializeField] private float dashingTargetMovementSpeed;
     [SerializeField] private float dashingDuration;
+    [Header("Event Channels")]
+    [SerializeField] private VoidEventChannelSO startDashingSO;
+    [SerializeField] private VoidEventChannelSO endDashingSO;
 
     private GameObject movementAllowedArea;
     private CustomFloatingJoystic floatingJoystick;
@@ -59,19 +61,14 @@ public class VirusDashingController : MonoBehaviour {
         MoveDashingTarget(movementVector);
     }
 
-        private IEnumerator PlayDashEffect()
+    private IEnumerator PlayDashEffect()
     {
-        //Play dash animation
-        dashingTarget.Hide();
-        trailRenderer.emitting = true;
-        drawingCircle.HideCircle();
+        startDashingSO.RaiseEvent();
 
         //Wait for dash animation
         yield return new WaitForSeconds(dashingDuration);
 
-        //Reset dashing variables
-        trailRenderer.emitting = false;
-        drawingCircle.ShowCircle();
+        endDashingSO.RaiseEvent();
     }
 
     private void MoveDashingTarget(Vector3 movementVector)
