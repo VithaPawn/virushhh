@@ -24,4 +24,6 @@ public class IntegerVariableSO : ScriptableObject
     }
 
     public int GetValue() { return value; }
+
+    public bool IsEqualZero() { return value == 0; }
 }

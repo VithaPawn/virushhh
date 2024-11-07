@@ -8,6 +8,11 @@ public class CircleDot : MonoBehaviour {
         transform.position = dotPos;
     }
 
+    public void SetLocalPosition(Vector3 localPos)
+    {
+        transform.localPosition = localPos;
+    }
+
     public void Hide()
     {
         gameObject.SetActive(false);

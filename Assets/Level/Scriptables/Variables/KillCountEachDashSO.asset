@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2de28b9929a24bb438288cfc71aae6b5, type: 3}
-  m_Name: KillCountBeforeDashSO
+  m_Name: KillCountEachDashSO
   m_EditorClassIdentifier: 
   description: The number of the enemies that the virus kills each dash. It will
     reset to 0 after dashing

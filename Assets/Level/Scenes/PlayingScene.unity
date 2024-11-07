@@ -549,7 +549,7 @@ RectTransform:
   m_GameObject: {fileID: 142695702}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1988136234}
@@ -645,7 +645,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.6, y: 0.6}
   m_EdgeRadius: 0
 --- !u!114 &142695708
 MonoBehaviour:
@@ -5019,10 +5019,13 @@ MonoBehaviour:
   subdivisions: 50
   dotPrefab: {fileID: 8851296151079317599, guid: 15415542ceec06b4685cb277c69ced83, type: 3}
   originalRadius: 2.5
-  radiusLevels: []
+  radiusLevels:
+  - ratioComparedToOriginal: 1
+  - ratioComparedToOriginal: 0.8
+  - ratioComparedToOriginal: 0.6
   startDashingSO: {fileID: 11400000, guid: 0eb1aaab7d939814b9b69ec77b000086, type: 2}
   endDashingSO: {fileID: 11400000, guid: 2f91d4e23050f3a4fa547472ad21453a, type: 2}
-  killCountBeforeDashSO: {fileID: 11400000, guid: 8163a8ba41bd27442a5212d920a7c299, type: 2}
+  killCountEachDashSO: {fileID: 11400000, guid: 8163a8ba41bd27442a5212d920a7c299, type: 2}
 --- !u!1 &2017558048
 GameObject:
   m_ObjectHideFlags: 0
@@ -5051,8 +5054,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1683319320}
   - {fileID: 2137096465}
