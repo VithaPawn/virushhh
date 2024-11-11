@@ -6,4 +6,4 @@ I) Introduction
 Note: the game is currently being developed on the WebGL platform, but the ultimate goal is definitely still the mobile platform
 
 II) Features
-Will be updated later
+- Will be updated later
