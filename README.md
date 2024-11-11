@@ -1,4 +1,4 @@
-Virushhh
+# Virushhh
 
 I) Introduction
 - Style: a hyper casual game that focuses on fast-paced and challenging, eye-catching colors and simple yet highly replayable gameplay.
